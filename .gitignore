@@ -1,0 +1,10 @@
+# Build & Gradle files
+local.properties
+build/
+.gradle/
+
+# InteliJ files
+.idea/
+
+# OSX files
+.DS_Store

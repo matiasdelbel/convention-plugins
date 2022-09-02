@@ -6,21 +6,37 @@ import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import com.delbel.gradle.plugin.build
-import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.dependencies
 
 @Suppress(names = ["UnstableApiUsage"])
 class ComposeLibraryPlugin : Plugin<Project> {
 
     override fun apply(project: Project) = project.build {
-        buildFeatures { compose = true }
+        val versionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-        composeOptions { versionCatalog ->
+        buildFeatures {
+            compose = true
+        }
+
+        composeOptions {
             kotlinCompilerExtensionVersion = versionCatalog
                 .findVersion("androidxComposeCompiler")
                 .get()
                 .toString()
+
+            kotlinCompilerVersion = versionCatalog
+                .findVersion("androidxComposeCompilerVersion")
+                .get()
+                .toString()
+        }
+
+        dependencies {
+            add("debugImplementation", versionCatalog.findDependency("androidxComposeUiTooling").get())
+
+            add("implementation", versionCatalog.findDependency("androidxComposeMaterial").get())
+            add("implementation", versionCatalog.findDependency("androidxComposeUi").get())
         }
     }
 
@@ -28,11 +44,9 @@ class ComposeLibraryPlugin : Plugin<Project> {
         .getByType<LibraryExtension>()
         .apply { buildFeatures{ block() } }
 
-    private fun Project.composeOptions(block: ComposeOptions.(VersionCatalog) -> Unit) {
-        val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
+    private fun Project.composeOptions(block: ComposeOptions.() -> Unit) {
         extensions
             .getByType<LibraryExtension>()
-            .apply { composeOptions { block(libs) } }
+            .apply { composeOptions { block() } }
     }
 }

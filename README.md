@@ -94,15 +94,29 @@ plugins {
 ### `com.delbel.android.library.compose`
 #### What it does?
 Set up the basic configuration for an android compose module for you:
-```groovy
+```kotlin
 project.build {
+    val versionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
+
     buildFeatures { compose = true }
 
-    composeOptions { versionCatalog ->
+    composeOptions {
         kotlinCompilerExtensionVersion = versionCatalog
                 .findVersion("androidxComposeCompiler")
                 .get()
                 .toString()
+
+        kotlinCompilerVersion = versionCatalog
+                .findVersion("androidxComposeCompilerVersion")
+                .get()
+                .toString()
+    }
+
+    dependencies {
+        add("debugImplementation", versionCatalog.findDependency("androidxComposeUiTooling").get())
+
+        add("implementation", versionCatalog.findDependency("androidxComposeMaterial").get())
+        add("implementation", versionCatalog.findDependency("androidxComposeUi").get())
     }
 }
 ```
@@ -116,31 +130,23 @@ plugins {
 }
 ```
 
-The `versionCatalogs` is being uses for providing the `androidxComposeCompiler` version 
-(see [sharing dependency versions between projects](https://docs.gradle.org/current/userguide/platforms.html)).
+The `versionCatalogs` is being uses for providing the versions, (see 
+[sharing dependency versions between projects](https://docs.gradle.org/current/userguide/platforms.html)).
 The `androidxComposeCompiler` field defines the `kotlinCompilerExtensionVersion`.
 
-In order to provide the version, you will need to add the following code to the `settings.gradle.kts` file:
-```groovy
-dependencyResolutionManagement {
-    versionCatalogs {
-        create("libs") {
-            // Option 1
-            version("androidxComposeCompiler", "1.1.1")
-
-            // Option 2
-            // It could be provided also read it from a file
-            // from(files("../gradle/libs.versions.toml")) 
-        }
-    }
-}
-```
-
-If you prefer the option 2 (reading the property from a file), create a new 
-`../gradle/libs.versions.toml` file and add the following content:
+In order to provide the versions, you will need to create a `../gradle/libs.versions.toml` file and 
+add the following content:
 ```markdown
 [versions]
+[versions]
+androidxCompose = "1.1.1"
 androidxComposeCompiler = "1.1.1"
+androidxComposeCompilerVersion = "1.6.10"
+
+[libraries]
+androidxComposeMaterial = { group = "androidx.compose.material", name = "material", version.ref = "androidxCompose" }
+androidxComposeUi = { group = "androidx.compose.ui", name = "ui", version.ref = "androidxCompose" }
+androidxComposeUiTooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "androidxCompose" }
 ```
 
 ## Contributing

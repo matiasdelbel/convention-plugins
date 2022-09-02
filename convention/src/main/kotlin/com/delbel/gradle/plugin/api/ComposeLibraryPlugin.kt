@@ -22,7 +22,7 @@ class ComposeLibraryPlugin : Plugin<Project> {
 
         composeOptions {
             kotlinCompilerExtensionVersion = versionCatalog
-                .findVersion("androidxComposeCompiler")
+                .findVersion("androidxCompose")
                 .get()
                 .toString()
 

@@ -102,7 +102,7 @@ project.build {
 
     composeOptions {
         kotlinCompilerExtensionVersion = versionCatalog
-                .findVersion("androidxComposeCompiler")
+                .findVersion("androidxCompose")
                 .get()
                 .toString()
 
@@ -132,14 +132,12 @@ plugins {
 
 The `versionCatalogs` is being uses for providing the versions, (see 
 [sharing dependency versions between projects](https://docs.gradle.org/current/userguide/platforms.html)).
-The `androidxComposeCompiler` field defines the `kotlinCompilerExtensionVersion`.
 
 In order to provide the versions, you will need to create a `../gradle/libs.versions.toml` file and 
 add the following content:
 ```markdown
 [versions]
 androidxCompose = "1.1.1"
-androidxComposeCompiler = "1.1.1"
 androidxComposeCompilerVersion = "1.6.10"
 
 [libraries]

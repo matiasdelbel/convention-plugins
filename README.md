@@ -138,7 +138,6 @@ In order to provide the versions, you will need to create a `../gradle/libs.vers
 add the following content:
 ```markdown
 [versions]
-[versions]
 androidxCompose = "1.1.1"
 androidxComposeCompiler = "1.1.1"
 androidxComposeCompilerVersion = "1.6.10"

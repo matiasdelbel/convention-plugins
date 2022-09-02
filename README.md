@@ -52,8 +52,8 @@ plugins {
 
 ## Available plugins
 ### `com.delbel.android.library`
-Set up the basic configuration for an android module:
-
+#### What it does?
+Set up the basic configuration for an android module for you:
 ```groovy
 plugins {
     apply("com.android.library")
@@ -80,6 +80,67 @@ android {
         freeCompilerArgs = freeCompilerArgs.toMutableList() + "-Xopt-in=kotlin.RequiresOptIn" + "-Xjvm-default=all-compatibility"
     }
 }
+```
+
+#### Set up
+Apply the plugin:
+```groovy
+plugins {
+    id 'com.delbel.android.library'
+    // Other plugins...
+}
+```
+
+### `com.delbel.android.library.compose`
+#### What it does?
+Set up the basic configuration for an android compose module for you:
+```groovy
+project.build {
+    buildFeatures { compose = true }
+
+    composeOptions { versionCatalog ->
+        kotlinCompilerExtensionVersion = versionCatalog
+                .findVersion("androidxComposeCompiler")
+                .get()
+                .toString()
+    }
+}
+```
+
+#### Set up
+Apply the plugin:
+```groovy
+plugins {
+    id 'com.delbel.android.library.compose'
+    // Other plugins...
+}
+```
+
+The `versionCatalogs` is being uses for providing the `androidxComposeCompiler` version 
+(see [sharing dependency versions between projects](https://docs.gradle.org/current/userguide/platforms.html)).
+The `androidxComposeCompiler` field defines the `kotlinCompilerExtensionVersion`.
+
+In order to provide the version, you will need to add the following code to the `settings.gradle.kts` file:
+```groovy
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("libs") {
+            // Option 1
+            version("androidxComposeCompiler", "1.1.1")
+
+            // Option 2
+            // It could be provided also read it from a file
+            // from(files("../gradle/libs.versions.toml")) 
+        }
+    }
+}
+```
+
+If you prefer the option 2 (reading the property from a file), create a new 
+`../gradle/libs.versions.toml` file and add the following content:
+```markdown
+[versions]
+androidxComposeCompiler = "1.1.1"
 ```
 
 ## Contributing

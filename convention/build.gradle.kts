@@ -30,5 +30,10 @@ gradlePlugin {
             id = "com.delbel.android.library"
             implementationClass = "com.delbel.gradle.plugin.api.AndroidLibraryPlugin"
         }
+        /* Set up the basic configuration for an android compose module. */
+        register("com.delbel.android.library.compose") {
+            id = "com.delbel.android.library.compose"
+            implementationClass = "com.delbel.gradle.plugin.api.ComposeLibraryPlugin"
+        }
     }
 }

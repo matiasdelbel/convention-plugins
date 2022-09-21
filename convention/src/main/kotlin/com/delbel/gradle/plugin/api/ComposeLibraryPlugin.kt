@@ -8,7 +8,6 @@ import org.gradle.api.Project
 import com.delbel.gradle.plugin.build
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.kotlin.dsl.getByType
-import org.gradle.kotlin.dsl.dependencies
 
 @Suppress(names = ["UnstableApiUsage"])
 class ComposeLibraryPlugin : Plugin<Project> {
@@ -22,21 +21,14 @@ class ComposeLibraryPlugin : Plugin<Project> {
 
         composeOptions {
             kotlinCompilerExtensionVersion = versionCatalog
-                .findVersion("androidxCompose")
+                .findVersion("compose")
                 .get()
                 .toString()
 
             kotlinCompilerVersion = versionCatalog
-                .findVersion("androidxComposeCompilerVersion")
+                .findVersion("composeCompilerVersion")
                 .get()
                 .toString()
-        }
-
-        dependencies {
-            add("debugImplementation", versionCatalog.findDependency("androidxComposeUiTooling").get())
-
-            add("implementation", versionCatalog.findDependency("androidxComposeMaterial").get())
-            add("implementation", versionCatalog.findDependency("androidxComposeUi").get())
         }
     }
 
